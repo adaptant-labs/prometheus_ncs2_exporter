@@ -4,11 +4,12 @@ A Prometheus exporter for the Intel Neural Compute Stick 2 (NCS2) / Intel Movidi
 
 ## Usage
 
-`ncs2-exporter` can be run as-is without any additional configuration.
+`prometheus_ncs2_exporter` can be run as-is without any additional configuration.
 
 ```
-usage: main.py [-h] [--ip IP] [--port PORT] [--polling-interval SEC]
-               [--model MODEL] [--instantiate-devices]
+usage: prometheus_ncs2_exporter [-h] [--ip IP] [--port PORT]
+                                [--polling-interval SEC] [--model MODEL]
+                                [--instantiate-devices]
 
 Prometheus Exporter for Intel NCS2 Metrics
 
