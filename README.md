@@ -59,7 +59,7 @@ split into two parts:
 
 A high-level overview of the expected interactions, metric sources, and integration points is as follows:
 
-![NCS2 Exporter Overview](overview.png)
+![NCS2 Exporter Overview][overview]
 
 ### Device Metric Exporter Instantiation in Inference Applications
 
@@ -88,7 +88,7 @@ application to continue on with its main thread of execution. The thread is run 
 together with the main thread.
 
 For applications that wish to terminate gracefully, a `shutdown()` method is provided which can be used by exception
-and signal handlers. A more complete example demonstrating this use is provided in [inference_example.py](inference_example.py)
+and signal handlers. A more complete example demonstrating this use is provided in [inference_example.py][inference_example]
 for reference.
 
 #### Automated Metric Scraping / Kubernetes Pod Annotation
@@ -110,7 +110,7 @@ temperatures, there is an increased risk of inference failures being produced. T
 automatically once the internal device temperature reaches 70°C, at which point the USB device will automatically
 disconnect itself and it will no longer be possible to obtain thermal readings until it cools off and re-attaches.
 
-With these points in mind, sample alerting rules for Prometheus (provided in [alerting_rules.yml](alerting_rules.yml)
+With these points in mind, sample alerting rules for Prometheus (provided in [alerting_rules.yml][alerting_rules]
 for convenience) are as follows:
 
 ```yaml
@@ -149,6 +149,9 @@ agreement No 825480 ([SODALITE]).
 `prometheus_ncs2_exporter` is licensed under the terms of the Apache 2.0 license, the full
 version of which can be found in the LICENSE file included in the distribution.
 
+[overview]: https://raw.githubusercontent.com/adaptant-labs/prometheus_ncs2_exporter/master/overview.png
 [tracker]: https://github.com/adaptant-labs/prometheus_ncs2_exporter/issues
 [SODALITE]: https://sodalite.eu
+[alerting_rules]: https://raw.githubusercontent.com/adaptant-labs/prometheus_ncs2_exporter/master/alerting_rules.yml
 [inference_api]: https://docs.openvinotoolkit.org/2021.1/ie_python_api/annotated.html
+[inference_example]: https://raw.githubusercontent.com/adaptant-labs/prometheus_ncs2_exporter/master/inference_example.py
