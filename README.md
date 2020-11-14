@@ -53,6 +53,10 @@ split into two parts:
 - The main exporter that provides an overview of NCS2 devices on the system (discoverable/available)
 - A device metric exporter to be instantiated within each NCS2-enabled inference application independently
 
+A high-level overview of the expected interactions and integration points is as follows:
+
+![NCS2 Exporter Overview](overview.png)
+
 ### Device Metric Exporter Instantiation in Inference Applications
 
 #### Automated Metric Scraping / Kubernetes Pod Annotation
