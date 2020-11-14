@@ -12,16 +12,17 @@ class NCS2DeviceExporter(object):
     def __init__(self, inference_engine=IECore(), device='MYRIAD', registry=prometheus_client.REGISTRY, model=None,
                  ip='0.0.0.0', port=8085, polling_interval=5, separate_thread=True):
         self.device = device
-        self.inference_engine = inference_engine
         self.ip = ip
         self.port = port
         self.polling_interval = polling_interval
-        self.separate_thread = separate_thread
 
-        _supported_metrics = self.inference_engine.get_metric(self.device, 'SUPPORTED_METRICS')
+        self._inference_engine = inference_engine
+        self._separate_thread = separate_thread
 
-        self.thermal_metric_support = 'DEVICE_THERMAL' in _supported_metrics
-        if self.thermal_metric_support is False:
+        _supported_metrics = self._inference_engine.get_metric(self.device, 'SUPPORTED_METRICS')
+
+        self._thermal_metric_support = 'DEVICE_THERMAL' in _supported_metrics
+        if self._thermal_metric_support is False:
             print('\'DEVICE_THERMAL\' metric not supported on \'{}\''.format(device))
 
         registry.register(self)
@@ -35,23 +36,23 @@ class NCS2DeviceExporter(object):
         if separate_thread is True:
             self.thread = threading.Thread(target=self.run_http_server)
             self.thread.daemon = True
-            self.shutdown_flag = threading.Event()
+            self._shutdown_flag = threading.Event()
             self.start_http_server()
 
     def load_model(self, model):
         model_xml = model
         model_bin = os.path.splitext(model_xml)[0] + '.bin'
 
-        net = self.inference_engine.read_network(model_xml, model_bin)
-        return self.inference_engine.load_network(net, self.device)
+        net = self._inference_engine.read_network(model_xml, model_bin)
+        return self._inference_engine.load_network(net, self.device)
 
     def get_temperature(self):
-        if self.thermal_metric_support is False:
+        if self._thermal_metric_support is False:
             return 0
 
         # Querying the DEVICE_THERMAL metric requires a valid network to be loaded, or it will throw a TypeError
         try:
-            temperature = self.inference_engine.get_metric(self.device, 'DEVICE_THERMAL')
+            temperature = self._inference_engine.get_metric(self.device, 'DEVICE_THERMAL')
         except TypeError:
             # Return 0C if we're unable to obtain a reading
             return 0
@@ -66,23 +67,23 @@ class NCS2DeviceExporter(object):
         yield temp_gauge
 
     def start_http_server(self):
-        if self.separate_thread is True:
+        if self._separate_thread is True:
             self.thread.start()
 
     def run_http_server(self):
-        if self.separate_thread is False:
+        if self._separate_thread is False:
             return
 
         prometheus_client.start_http_server(addr=self.ip, port=self.port)
 
-        while not self.shutdown_flag.isSet():
+        while not self._shutdown_flag.isSet():
             sleep(self.polling_interval)
 
     def shutdown(self):
-        if self.separate_thread is False:
+        if self._separate_thread is False:
             return
 
-        self.shutdown_flag.set()
+        self._shutdown_flag.set()
         self.thread.join()
 
 
