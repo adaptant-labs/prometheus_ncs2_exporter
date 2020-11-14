@@ -88,7 +88,7 @@ class NCS2Exporter:
 
 
 class UsageFormatter(argparse.HelpFormatter):
-    def __init__(self, prog, indent_increment=2, max_help_position=30):
+    def __init__(self, prog, indent_increment=2, max_help_position=50):
         super().__init__(prog, indent_increment=indent_increment, max_help_position=max_help_position)
 
 
@@ -99,6 +99,8 @@ def main():
                         default='0.0.0.0')
     parser.add_argument('--port', dest='port', help='Port to expose metrics on (default: %(default)s)',
                         type=int, default=8084)
+    parser.add_argument('--polling-interval', dest='polling_interval', type=int, default=1, metavar='SEC',
+                        help='Polling interval in seconds (default: %(default)s)')
     parser.add_argument('--model', dest='model', help='XML (IR) model to load (only for validation)')
     parser.add_argument('--instantiate-devices', action='store_true', dest='instantiate_devices',
                         help='Instantiate available devices (only for validation)')
@@ -106,7 +108,7 @@ def main():
 
     if args.model is not None:
         print('Loading Model: {}'.format(args.model))
-        # Model loading implies devices instantiation
+        # Model loading implies device instantiation
         args.instantiate_devices = True
 
     # Initialize the main collector
@@ -122,7 +124,7 @@ def main():
     prometheus_client.start_http_server(addr=args.ip, port=args.port)
 
     while True:
-        sleep(1)
+        sleep(args.polling_interval)
 
 
 if __name__ == '__main__':

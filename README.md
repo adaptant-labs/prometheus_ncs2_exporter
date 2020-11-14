@@ -7,17 +7,18 @@ A Prometheus exporter for the Intel Neural Compute Stick 2 (NCS2) / Intel Movidi
 `ncs2-exporter` can be run as-is without any additional configuration.
 
 ```
-usage: main.py [-h] [--ip IP] [--port PORT] [--model MODEL]
-               [--instantiate-devices]
+usage: main.py [-h] [--ip IP] [--port PORT] [--polling-interval SEC]
+               [--model MODEL] [--instantiate-devices]
 
 Prometheus Exporter for Intel NCS2 Metrics
 
 optional arguments:
-  -h, --help             show this help message and exit
-  --ip IP                IP address to bind to (default: 0.0.0.0)
-  --port PORT            Port to expose metrics on (default: 8084)
-  --model MODEL          XML (IR) model to load (only for validation)
-  --instantiate-devices  Instantiate available devices (only for validation)
+  -h, --help              show this help message and exit
+  --ip IP                 IP address to bind to (default: 0.0.0.0)
+  --port PORT             Port to expose metrics on (default: 8084)
+  --polling-interval SEC  Polling interval in seconds (default: 1)
+  --model MODEL           XML (IR) model to load (only for validation)
+  --instantiate-devices   Instantiate available devices (only for validation)
 ```
 
 ## Metrics
