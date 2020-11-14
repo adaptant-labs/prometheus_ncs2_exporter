@@ -59,7 +59,7 @@ split into two parts:
 
 A high-level overview of the expected interactions, metric sources, and integration points is as follows:
 
-![NCS2 Exporter Overview][overview]
+![NCS2 Exporter Overview](https://github.com/adaptant-labs/prometheus_ncs2_exporter/blob/master/overview.png?raw=true)
 
 ### Device Metric Exporter Instantiation in Inference Applications
 
@@ -149,7 +149,6 @@ agreement No 825480 ([SODALITE]).
 `prometheus_ncs2_exporter` is licensed under the terms of the Apache 2.0 license, the full
 version of which can be found in the LICENSE file included in the distribution.
 
-[overview]: https://raw.githubusercontent.com/adaptant-labs/prometheus_ncs2_exporter/master/overview.png
 [tracker]: https://github.com/adaptant-labs/prometheus_ncs2_exporter/issues
 [SODALITE]: https://sodalite.eu
 [alerting_rules]: https://raw.githubusercontent.com/adaptant-labs/prometheus_ncs2_exporter/master/alerting_rules.yml
