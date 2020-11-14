@@ -49,6 +49,7 @@ def main():
     exporter = NCS2DeviceExporter(inference_engine=inference_engine,
                                   polling_interval=args.polling_interval,
                                   port=args.metrics_port)
+    exporter.start_http_server()
 
     print('Running in the main thread')
 

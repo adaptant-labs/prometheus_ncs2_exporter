@@ -37,7 +37,6 @@ class NCS2DeviceExporter(object):
             self.thread = threading.Thread(target=self.run_http_server)
             self.thread.daemon = True
             self._shutdown_flag = threading.Event()
-            self.start_http_server()
 
     def load_model(self, model):
         model_xml = model

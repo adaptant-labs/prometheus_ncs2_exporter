@@ -4,9 +4,11 @@ A Prometheus exporter for the Intel Neural Compute Stick 2 (NCS2) / Intel Movidi
 
 ## Usage
 
-`prometheus_ncs2_exporter` can be run as-is without any additional configuration.
+`prometheus_ncs2_exporter` can be run as-is without any additional configuration. A number of configuration and
+validation options are provided, but should not need to be used in normal cases. These are explained below:
 
 ```
+$ prometheus_ncs2_exporter --help
 usage: prometheus_ncs2_exporter [-h] [--ip IP] [--port PORT]
                                 [--polling-interval SEC] [--model MODEL]
                                 [--instantiate-devices]
@@ -61,10 +63,38 @@ A high-level overview of the expected interactions, metric sources, and integrat
 
 ### Device Metric Exporter Instantiation in Inference Applications
 
+`prometheus_ncs2_exporter` exposes a python API that can be used directly by inference applications, and which is
+complementary to the [OpenVINO Inference Engine Python API][inference_api]. A minimal example is provided below:
+
+```python
+from prometheus_ncs2_exporter import NCS2DeviceExporter
+from openvino.inference_engine import IECore
+from time import sleep
+
+inference_engine = IECore()
+net = inference_engine.read_network('model.xml', 'model.bin')
+exec_net = inference_engine.load_network(net, 'MYRIAD')
+
+exporter = NCS2DeviceExporter(inference_engine=inference_engine)
+exporter.start_http_server()
+
+while True:
+    sleep(1)
+```
+
+Note that while `start_http_server()` will kick off a separate thread from which to serve the device metrics from
+(exposed on port 8085 by default), it is *non-blocking* by default. This is by design, as it permits the inference
+application to continue on with its main thread of execution. The thread is run in `daemon` mode, and will terminate
+together with the main thread.
+
+For applications that wish to terminate gracefully, a `shutdown()` method is provided which can be used by exception
+and signal handlers. A more complete example demonstrating this use is provided in [inference_example.py](inference_example.py)
+for reference.
+
 #### Automated Metric Scraping / Kubernetes Pod Annotation
 
 As each application instantiating the device metric exporter will be exposing metrics, Kubernetes Pods should be
-annotated with the `prometheus.io/scrape: true` annotation in order to be automatically scraped alongside the main
+annotated with the `prometheus.io/scrape: "true"` annotation in order to be automatically scraped alongside the main
 exporter.
 
 ### Device Validation with Model Loading
@@ -121,3 +151,4 @@ version of which can be found in the LICENSE file included in the distribution.
 
 [tracker]: https://github.com/adaptant-labs/prometheus_ncs2_exporter/issues
 [SODALITE]: https://sodalite.eu
+[inference_api]: https://docs.openvinotoolkit.org/2021.1/ie_python_api/annotated.html
