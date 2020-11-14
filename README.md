@@ -55,7 +55,7 @@ split into two parts:
 - The main exporter that provides an overview of NCS2 devices on the system (discoverable/available)
 - A device metric exporter to be instantiated within each NCS2-enabled inference application independently
 
-A high-level overview of the expected interactions and integration points is as follows:
+A high-level overview of the expected interactions, metric sources, and integration points is as follows:
 
 ![NCS2 Exporter Overview](overview.png)
 
@@ -116,9 +116,8 @@ agreement No 825480 ([SODALITE]).
 
 ## License
 
-`ncs2-exporter` is licensed under the terms of the Apache 2.0 license, the full
+`prometheus_ncs2_exporter` is licensed under the terms of the Apache 2.0 license, the full
 version of which can be found in the LICENSE file included in the distribution.
 
-[tracker]: https://github.com/adaptant-labs/ncs2-exporter/issues
-[adaptant/ncs2-exporter]: https://hub.docker.com/repository/docker/adaptant/ncs2-exporter
+[tracker]: https://github.com/adaptant-labs/prometheus_ncs2_exporter/issues
 [SODALITE]: https://sodalite.eu
