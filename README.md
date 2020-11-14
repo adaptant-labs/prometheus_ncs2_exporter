@@ -65,11 +65,43 @@ As each application instantiating the device metric exporter will be exposing me
 annotated with the `prometheus.io/scrape: true` annotation in order to be automatically scraped alongside the main
 exporter.
 
-## Device Validation with Model Loading
+### Device Validation with Model Loading
 
 The option to load a model onto each available device is provided for
 validating the functionality of the exporter, but as this generates work on the device-under-monitoring and, worse,
 potentially makes a device unavailable to a service that actually needs it, should never be used in production.
+
+## Alerting Rules
+
+The stated nominal operating range for the NCS2 is between 0°C and 40°C. While it can still operate at higher
+temperatures, there is an increased risk of inference failures being produced. Thermal throttling is applied
+automatically once the internal device temperature reaches 70°C, at which point the USB device will automatically
+disconnect itself and it will no longer be possible to obtain thermal readings until it cools off and re-attaches.
+
+With these points in mind, sample alerting rules for Prometheus (provided in [alerting_rules.yml](alerting_rules.yml)
+for convenience) are as follows:
+
+```yaml
+groups:
+  - name: ncs2_temp_monitoring
+    rules:
+      - alert: ncs2_temp_warning
+        expr: ncs2_temperature_celsius > 45.0
+        labels:
+          severity: warning
+        annotations:
+          summary: "High NCS2 device temperature"
+      - alert: ncs2_temp_critical
+        expr: ncs2_temperature_celsius > 65.0
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical NCS2 device temperature"
+```
+
+Depending on the deployment, it may be necessary to increase the warning threshold to avoid spurious warnings. It is
+recommended to monitor the expected upper bounds of the inference workload in real-world deployments and to adjust this
+accordingly.
 
 ## Features and bugs
 

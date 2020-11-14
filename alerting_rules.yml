@@ -1,0 +1,15 @@
+groups:
+  - name: ncs2_temp_monitoring
+    rules:
+      - alert: ncs2_temp_warning
+        expr: ncs2_temperature_celsius > 45.0
+        labels:
+          severity: warning
+        annotations:
+          summary: "High NCS2 device temperature"
+      - alert: ncs2_temp_critical
+        expr: ncs2_temperature_celsius > 65.0
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical NCS2 device temperature"
