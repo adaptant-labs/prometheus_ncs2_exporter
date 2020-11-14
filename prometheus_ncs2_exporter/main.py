@@ -1,12 +1,7 @@
 import argparse
 import prometheus_client
 from time import sleep
-from . import NCS2Exporter, NCS2DeviceExporter
-
-
-class UsageFormatter(argparse.HelpFormatter):
-    def __init__(self, prog, indent_increment=2, max_help_position=50):
-        super().__init__(prog, indent_increment=indent_increment, max_help_position=max_help_position)
+from . import NCS2Exporter, NCS2DeviceExporter, UsageFormatter
 
 
 def main():
@@ -32,9 +27,10 @@ def main():
     ncs2 = NCS2Exporter()
 
     if args.instantiate_devices is True:
-        # Initialize per-device collectors
+        # Initialize per-device collectors, polling from the main thread
         for device_name in ncs2.get_available_devices():
-            dev = NCS2DeviceExporter(device=device_name, inference_engine=ncs2.inference_engine, model=args.model)
+            dev = NCS2DeviceExporter(device=device_name, inference_engine=ncs2.inference_engine,
+                                     model=args.model, separate_thread=False)
             print('Gathering metrics from \'{}\' device'.format(dev.device))
 
     print('Listening on: {}:{}'.format(args.ip, args.port))

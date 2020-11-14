@@ -1,19 +1,22 @@
 import prometheus_client
 import os
 import usb.core
+import threading
+from argparse import HelpFormatter
 from prometheus_client.core import GaugeMetricFamily
 from openvino.inference_engine import IECore
+from time import sleep
 
 
 class NCS2DeviceExporter(object):
     def __init__(self, inference_engine=IECore(), device='MYRIAD', registry=prometheus_client.REGISTRY, model=None,
-                 ip='0.0.0.0', port='8085', threading=False, polling_interval=5):
+                 ip='0.0.0.0', port=8085, polling_interval=5, separate_thread=True):
         self.device = device
         self.inference_engine = inference_engine
         self.ip = ip
         self.port = port
-        self.threading = threading
         self.polling_interval = polling_interval
+        self.separate_thread = separate_thread
 
         _supported_metrics = self.inference_engine.get_metric(self.device, 'SUPPORTED_METRICS')
 
@@ -28,6 +31,12 @@ class NCS2DeviceExporter(object):
             self.exec_net = self.load_model(model)
         else:
             self.exec_net = None
+
+        if separate_thread is True:
+            self.thread = threading.Thread(target=self.run_http_server)
+            self.thread.daemon = True
+            self.shutdown_flag = threading.Event()
+            self.start_http_server()
 
     def load_model(self, model):
         model_xml = model
@@ -57,7 +66,24 @@ class NCS2DeviceExporter(object):
         yield temp_gauge
 
     def start_http_server(self):
-        pass
+        if self.separate_thread is True:
+            self.thread.start()
+
+    def run_http_server(self):
+        if self.separate_thread is False:
+            return
+
+        prometheus_client.start_http_server(addr=self.ip, port=self.port)
+
+        while not self.shutdown_flag.isSet():
+            sleep(self.polling_interval)
+
+    def shutdown(self):
+        if self.separate_thread is False:
+            return
+
+        self.shutdown_flag.set()
+        self.thread.join()
 
 
 class NCS2Exporter(object):
@@ -91,3 +117,8 @@ class NCS2Exporter(object):
         yield GaugeMetricFamily('ncs2_num_available_devices',
                                 'Number of available NCS2 devices',
                                 value=self.num_available_devices())
+
+
+class UsageFormatter(HelpFormatter):
+    def __init__(self, prog, indent_increment=2, max_help_position=50):
+        super().__init__(prog, indent_increment=indent_increment, max_help_position=max_help_position)
