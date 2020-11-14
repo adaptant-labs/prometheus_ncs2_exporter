@@ -10,7 +10,7 @@ setup(
     name='prometheus_ncs2_exporter',
     version='0.0.1',
     packages=['prometheus_ncs2_exporter'],
-    url='https://github.com/adaptant-labs/prometheus-ncs2-exporter',
+    url='https://github.com/adaptant-labs/prometheus_ncs2_exporter',
     license='Apache 2.0',
     author='Adaptant Labs',
     author_email='labs@adaptant.io',
