@@ -1,5 +1,7 @@
 # Intel NCS2 Prometheus Exporter
 
+[![PyPI](https://img.shields.io/pypi/v/prometheus-ncs2-exporter.svg)](https://pypi.python.org/pypi/prometheus-ncs2-exporter)
+
 A Prometheus exporter for the Intel Neural Compute Stick 2 (NCS2) / Intel Movidius MyriadX
 
 ## Usage
