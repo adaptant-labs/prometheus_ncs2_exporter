@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ncs2-exporter
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: ncs2-exporter
+  template:
+    metadata:
+      labels:
+        name: ncs2-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: ncs2-exporter
+          image: adaptant/prometheus-ncs2-exporter:latest
+          ports:
+            - containerPort: 8084
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  # k8s-auto-labeller
+                  - key: accelerators/ncs2
+                    operator: Exists
+              - matchExpressions:
+                  # USB-attached NCS2 (using NFD discovery)
+                  - key: feature.node.kubernetes.io/usb-ff_03e7_2485.present
+                    operator: In
+                    values:
+                      - "true"

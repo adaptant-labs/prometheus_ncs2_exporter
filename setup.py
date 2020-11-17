@@ -8,7 +8,7 @@ with open('README.md', encoding='utf-8') as readme:
 
 setup(
     name='prometheus_ncs2_exporter',
-    version='0.0.1',
+    version='0.1.0',
     packages=['prometheus_ncs2_exporter'],
     url='https://github.com/adaptant-labs/prometheus_ncs2_exporter',
     license='Apache 2.0',
@@ -17,12 +17,16 @@ setup(
     description='Prometheus Exporter for Intel NCS2 Metrics',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    keywords=['prometheus', 'movidius', 'ncs2', 'myriadx', 'monitoring', 'exporter'],
+    keywords=['prometheus', 'movidius', 'ncs2', 'myriad', 'myriadx', 'monitoring', 'exporter'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
+        'Topic :: System :: Hardware',
         'Topic :: System :: Monitoring',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'License :: OSI Approved :: Apache Software License',
     ],
     install_requires=requirements,
