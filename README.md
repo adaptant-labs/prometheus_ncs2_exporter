@@ -3,6 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/prometheus-ncs2-exporter.svg)](https://pypi.python.org/pypi/prometheus-ncs2-exporter)
 [![PyPI](https://img.shields.io/pypi/pyversions/prometheus-ncs2-exporter.svg)](https://pypi.python.org/pypi/prometheus-ncs2-exporter)
 [![Docker Pulls](https://img.shields.io/docker/pulls/adaptant/prometheus-ncs2-exporter.svg)](https://hub.docker.com/repository/docker/adaptant/prometheus-ncs2-exporter)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adaptant-labs_prometheus_ncs2_exporter&metric=alert_status)](https://sonarcloud.io/dashboard?id=adaptant-labs_prometheus_ncs2_exporter)
 
 A Prometheus exporter for the Intel Neural Compute Stick 2 (NCS2) / Intel Movidius MyriadX
 
